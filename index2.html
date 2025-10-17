@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiClean Soluciones - Aseo Empresarial y Residencial</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de color personalizado para Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'lima': '#a3e635', // Verde Lima
+                        'aguamarina': '#20b2aa', // Azul Aguamarina
+                        'gris-claro': '#f3f4f6', // Gris Claro
+                        'op-blue': '#008cba', // Azul base del logo
+                        'op-green': '#65a30d', // Verde base del logo
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Iconos de Lucide -->
+    <script type="module">
+        import { ShoppingCart, Menu, X, ArrowDown, Users, Zap, Leaf, CheckCircle, Smartphone, Globe, Link } from 'https://cdn.skypack.dev/lucide-react';
+        window.lucide = { ShoppingCart, Menu, X, ArrowDown, Users, Zap, Leaf, CheckCircle, Smartphone, Globe, Link };
+    </script>
+    <style>
+        /* Estilo para el cuerpo y la fuente */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white;
+        }
+        /* Estilos del logo (SVG en línea) */
+        .logo-svg {
+            width: 50px;
+            height: 50px;
+        }
+        /* Clase para el fondo degradado en el encabezado */
+        .header-bg {
+            background: linear-gradient(135deg, #20b2aa 0%, #a3e635 100%);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Contenedor principal de la aplicación con lógica de traducción -->
+    <div id="app">
+        <!-- Barra de Navegación Fija -->
+        <header class="sticky top-0 z-50 shadow-lg bg-white/95 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <!-- Logo y Nombre de la Empresa -->
+                    <div class="flex-shrink-0 flex items-center space-x-3">
+                        <!-- SVG del Logo (Basado en la imagen enviada) -->
+                        <div class="logo-svg">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:currentColor;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#a3e635;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Círculo de fondo con degradado (Azul Aguamarina a Verde Lima) -->
+                                <circle cx="100" cy="100" r="95" fill="none" stroke="url(#gradient)" stroke-width="10"/>
+
+                                <!-- Icono de Edificio (Azul) -->
+                                <g transform="translate(100, 100) scale(0.6)" fill="#20b2aa">
+                                    <path d="M-50 -10 L-50 40 L-30 40 L-30 -10 Z" />
+                                    <path d="M-20 20 L-20 40 L0 40 L0 20 Z" />
+                                    <path d="M-100 -60 L-100 40 L-80 40 L-80 -60 Z" />
+                                    <path d="M100 -60 L100 40 L80 40 L80 -60 Z" />
+                                    <!-- Centro principal -->
+                                    <path d="M-60 -100 L-60 40 L60 40 L60 -100 L0 -140 Z" />
+                                    <!-- Camino blanco que representa la entrada -->
+                                    <path fill="white" d="M-15 40 L-15 80 L15 80 L15 40 L0 10 L-15 40 Z" />
+                                </g>
+
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold text-op-blue">OptiClean Soluciones</span>
+                    </div>
+
+                    <!-- Menú de Navegación, Carrito y Botones de Contacto -->
+                    <div class="flex items-center space-x-4">
+
+                        <!-- Botón de Carrito (Requisito: Espacio para añadir al carrito) -->
+                        <button id="cart-button" class="p-3 bg-gris-claro text-op-blue hover:bg-lima hover:text-white transition rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-lima">
+                            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="ShoppingCart">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 12.09a2 2 0 002 1.91h9.64a2 2 0 002-1.91L23 6H6"></path>
+                            </svg>
+                        </button>
+                        <span id="cart-count" class="absolute -mt-8 ml-8 bg-op-green text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+
+
+                        <!-- Dropdown de Traducción -->
+                        <div class="relative inline-block text-left">
+                            <button id="translate-button" class="flex items-center space-x-2 p-3 bg-aguamarina text-white hover:bg-op-blue transition rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-aguamarina">
+                                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Globe">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+                                    <path d="M2 12h20"></path>
+                                </svg>
+                                <span class="hidden md:inline" data-key="language">Idioma</span>
+                            </button>
+                            <div id="translate-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="translate-button" tabindex="-1">
+                                <div class="py-1" role="none">
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gris-claro" data-lang="es" data-key="lang_es" role="menuitem" tabindex="-1">Español</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gris-claro" data-lang="en" data-key="lang_en" role="menuitem" tabindex="-1">English</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gris-claro" data-lang="pt" data-key="lang_pt" role="menuitem" tabindex="-1">Português</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botón de WhatsApp -->
+                        <a href="https://wa.me/+573182180179" target="_blank" class="flex items-center space-x-2 p-3 bg-[#25D366] text-white hover:bg-[#128C7E] transition rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-[#25D366]">
+                            <!-- Icono de WhatsApp (SVG simple para un mejor rendimiento) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.109A11.04 11.04 0 0 1 0 12C0 5.4 5.405 0 12.001 0c3.228 0 6.29 1.488 8.448 4.145A11.758 11.758 0 0 1 24 12c0 6.598-5.405 12-12 12a12.08 12.08 0 0 1-5.748-1.468zM12 2.375A9.638 9.638 0 0 0 2.375 12a9.61 9.61 0 0 0 1.583 5.418l-1.036 3.753 3.864-1.01A9.55 9.55 0 0 0 12 21.625 9.638 9.638 0 0 0 21.625 12 9.638 9.638 0 0 0 12 2.375zM17.47 15.353c-.226-.113-.59-.283-.872-.423-.283-.141-.491-.211-.7-.246-.211-.035-.456-.035-.701.035-.246.07-.468.283-.713.528-.246.246-.472.268-.905.158s-.863-.316-1.644-1.01c-.6-.532-1.118-1.185-1.486-1.745-.36-.552-.045-.852.19-.992.238-.141.491-.368.665-.552.174-.183.238-.34.35-.552.113-.211.056-.395-.023-.552-.07-.157-.63-.332-.701-.489-.07-.158-.59-.141-.872-.141-.283 0-.59.035-.905.41-.315.375-1.196 1.171-1.196 2.853 0 1.681 1.22 3.328 1.4 3.565.174.238 2.41 3.903 5.922 5.03.35.112.63.174.96.174.331 0 .96-.113 1.258-.226.315-.113.872-.423 1.013-.787.14-.368.14-.683.097-.753-.045-.07-.211-.113-.41-.183z"/></svg>
+                            <span class="hidden md:inline" data-key="whatsapp_contact">Contáctanos</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sección 1: Héroe y Llamada a la Acción -->
+        <main class="pt-10">
+            <section class="header-bg text-white py-20 rounded-b-2xl shadow-xl">
+                <div class="max-w-4xl mx-auto text-center px-4">
+                    <h1 data-key="hero_title" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
+                        OptiClean Soluciones: La Limpieza Inteligente
+                    </h1>
+                    <p data-key="hero_subtitle" class="text-xl sm:text-2xl mb-8 font-light opacity-90">
+                        Excelencia, Tecnología de Vanguardia y Compromiso Ecológico para su Empresa o Residencia.
+                    </p>
+                    <a href="#services-section" data-key="hero_cta" class="inline-block px-10 py-4 bg-white text-op-blue text-lg font-semibold rounded-full hover:bg-gris-claro transition transform hover:scale-105 shadow-xl">
+                        Descubra Nuestros Servicios
+                    </a>
+                </div>
+            </section>
+
+            <!-- Sección 2: Misión y Visión (Nosotros) -->
+            <section id="about-us" class="py-16 bg-gris-claro">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 data-key="about_us_title" class="text-3xl font-bold text-center text-op-blue mb-12">Nuestra Propuesta de Valor</h2>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <!-- Misión Card -->
+                        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-aguamarina">
+                            <h3 data-key="mission_title" class="text-2xl font-semibold text-gray-700 mb-4 flex items-center"><svg className="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="CheckCircle"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><path d="M22 4L12 14l-3-3"></path></svg> Misión</h3>
+                            <p data-key="mission_content" class="text-gray-600 leading-relaxed">
+                                Ofrecer servicios de aseo y mantenimiento de alta calidad a empresas y conjuntos residenciales en *la región, garantizando la **óptima limpieza y desinfección* de sus espacios. Cumplimos nuestra promesa mediante la implementación de *tecnología de vanguardia, un equipo humano **calificado y experimentado, y la priorización de **prácticas ecológicas* que minimizan el impacto ambiental.
+                            </p>
+                        </div>
+                        <!-- Visión Card -->
+                        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-lima">
+                            <h3 data-key="vision_title" class="text-2xl font-semibold text-gray-700 mb-4 flex items-center"><svg className="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Visión</h3>
+                            <p data-key="vision_content" class="text-gray-600 leading-relaxed">
+                                Ser la empresa líder en soluciones integrales de aseo empresarial y residencial en el suroccidente colombiano, reconocida por nuestra *excelencia operativa* impulsada por la *innovación tecnológica* y un firme *compromiso con la sostenibilidad*. Buscamos transformar la percepción del servicio de limpieza.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 3: Valores de la Empresa -->
+            <section id="values" class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 data-key="values_title" class="text-3xl font-bold text-center text-op-green mb-12">Nuestros Valores: El Motor de la Excelencia</h2>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
+
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-op-blue hover:shadow-xl transition">
+                            <svg className="h-10 w-10 text-op-blue mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            <h4 data-key="value1_title" class="font-semibold text-lg mb-2">Innovación Tecnológica</h4>
+                            <p data-key="value1_content" class="text-sm text-gray-500">Usamos maquinaria de última generación para optimizar procesos y garantizar resultados superiores.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-aguamarina hover:shadow-xl transition">
+                            <svg className="h-10 w-10 text-aguamarina mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="CheckCircle"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><path d="M22 4L12 14l-3-3"></path></svg>
+                            <h4 data-key="value2_title" class="font-semibold text-lg mb-2">Excelencia y Calidad</h4>
+                            <p data-key="value2_content" class="text-sm text-gray-500">Nos comprometemos con los más altos estándares, ofreciendo limpieza y desinfección impecable.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-op-green hover:shadow-xl transition">
+                            <svg className="h-10 w-10 text-op-green mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Leaf"><path d="M11 21A20 20 0 0021 11c0-4.6-3.1-8.5-7.5-9.6-.9-.3-1.8-.4-2.7-.4-5.2 0-9.4 4.2-9.4 9.4 0 4.6 3.1 8.5 7.5 9.6z"></path></svg>
+                            <h4 data-key="value3_title" class="font-semibold text-lg mb-2">Sostenibilidad Ambiental</h4>
+                            <p data-key="value3_content" class="text-sm text-gray-500">Priorizamos productos y métodos ecológicos para minimizar el impacto en nuestro mundo.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-op-blue hover:shadow-xl transition">
+                            <svg className="h-10 w-10 text-op-blue mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Users"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><path d="M20 8v6M23 11h-6"></path></svg>
+                            <h4 data-key="value4_title" class="font-semibold text-lg mb-2">Talento Humano</h4>
+                            <p data-key="value4_content" class="text-sm text-gray-500">Equipo calificado y experimentado, garantizando la calidad y la eficiencia del servicio.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-6 bg-white rounded-xl shadow-lg border-b-4 border-aguamarina hover:shadow-xl transition">
+                            <svg className="h-10 w-10 text-aguamarina mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>
+                            <h4 data-key="value5_title" class="font-semibold text-lg mb-2">Confianza y Cumplimiento</h4>
+                            <p data-key="value5_content" class="text-sm text-gray-500">Transparencia y riguroso cumplimiento de los acuerdos para construir relaciones duraderas.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 4: Servicios e Imágenes -->
+            <section id="services-section" class="py-16 bg-gris-claro">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 data-key="services_title" class="text-3xl font-bold text-center text-op-blue mb-12">Nuestros Servicios Especializados</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+
+                        <!-- Tarjeta de Servicio 1: Conjuntos Residenciales (Escaleras) -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden transition transform hover:scale-[1.02]">
+                            <!-- Imagen de marcador para mujer limpiando escaleras/zonas comunes -->
+                            <img src="https://placehold.co/600x400/20b2aa/ffffff?text=Mujer+limpiando+escaleras" onerror="this.onerror=null;this.src='https://placehold.co/600x400/20b2aa/ffffff?text=Mujer+limpiando+escaleras';" alt="[Image of woman cleaning stairs]" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 data-key="service1_title" class="text-xl font-semibold text-op-blue mb-3">Conjuntos Residenciales</h3>
+                                <p data-key="service1_content" class="text-gray-600">
+                                    Mantenimiento de zonas comunes, piscinas, escaleras y áreas sociales, asegurando el bienestar y la calidad de vida de los residentes.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Servicio 2: Empresas (Fachadas) -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden transition transform hover:scale-[1.02]">
+                            <!-- Imagen de marcador para hombre limpiando fachadas -->
+                            <img src="https://placehold.co/600x400/a3e635/000000?text=Hombre+limpiando+fachada" onerror="this.onerror=null;this.src='https://placehold.co/600x400/a3e635/000000?text=Hombre+limpiando+fachada';" alt="" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 data-key="service2_title" class="text-xl font-semibold text-op-blue mb-3">Aseo Empresarial e Industrial</h3>
+                                <p data-key="service2_content" class="text-gray-600">
+                                    Limpieza profunda y desinfección de oficinas, fachadas, áreas de producción y zonas de alto tráfico con equipos tecnológicos.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Servicio 3: Parqueaderos y Limpieza Técnica -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden transition transform hover:scale-[1.02]">
+                            <!-- Imagen de marcador para equipo limpiando parqueaderos -->
+                            <img src="https://placehold.co/600x400/008cba/ffffff?text=Equipo+limpiando+parqueadero" onerror="this.onerror=null;this.src='https://placehold.co/600x400/008cba/ffffff?text=Equipo+limpiando+parqueadero';" alt="" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 data-key="service3_title" class="text-xl font-semibold text-op-blue mb-3">Limpieza de Parqueaderos y Áreas Duras</h3>
+                                <p data-key="service3_content" class="text-gray-600">
+                                    Utilizamos maquinaria especializada para la limpieza profunda de pisos y parqueaderos, eliminando manchas difíciles con eficiencia.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Botón para ver más servicios o solicitar cotización -->
+                    <div class="text-center mt-12">
+                         <a href="https://wa.me/+573182180179" target="_blank" data-key="services_cta" class="inline-block px-8 py-3 bg-op-green text-white text-lg font-semibold rounded-full hover:bg-lima transition transform hover:scale-105 shadow-xl">
+                            Solicitar Cotización Ahora
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 5: Contacto y Footer -->
+            <footer class="bg-gray-800 text-white py-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <p data-key="footer_phone" class="text-xl font-light mb-2">
+                        Contacto Directo: +57 318 218 0179
+                    </p>
+                    <p class="text-xl font-light mb-4">
+                        <a href="http://opticlean.xyz.com" target="_blank" class="text-lima hover:text-aguamarina transition flex items-center justify-center space-x-2">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="Link"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"></path></svg>
+                            <span data-key="footer_web">opticlean.xyz.com</span>
+                        </a>
+                    </p>
+                    <p data-key="footer_address" class="text-gray-400 text-sm mb-6">
+                        Sede en Colombia. Sirviendo al suroccidente colombiano.
+                    </p>
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://wa.me/+573182180179" target="_blank" data-key="footer_whatsapp" class="text-op-green hover:text-lima transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.109A11.04 11.04 0 0 1 0 12C0 5.4 5.405 0 12.001 0c3.228 0 6.29 1.488 8.448 4.145A11.758 11.758 0 0 1 24 12c0 6.598-5.405 12-12 12a12.08 12.08 0 0 1-5.748-1.468zM12 2.375A9.638 9.638 0 0 0 2.375 12a9.61 9.61 0 0 0 1.583 5.418l-1.036 3.753 3.864-1.01A9.55 9.55 0 0 0 12 21.625 9.638 9.638 0 0 0 21.625 12 9.638 9.638 0 0 0 12 2.375zM17.47 15.353c-.226-.113-.59-.283-.872-.423-.283-.141-.491-.211-.7-.246-.211-.035-.456-.035-.701.035-.246.07-.468.283-.713.528-.246.246-.472.268-.905.158s-.863-.316-1.644-1.01c-.6-.532-1.118-1.185-1.486-1.745-.36-.552-.045-.852.19-.992.238-.141.491-.368.665-.552.174-.183.238-.34.35-.552.113-.211.056-.395-.023-.552-.07-.157-.63-.332-.701-.489-.07-.158-.59-.141-.872-.141-.283 0-.59.035-.905.41-.315.375-1.196 1.171-1.196 2.853 0 1.681 1.22 3.328 1.4 3.565.174.238 2.41 3.903 5.922 5.03.35.112.63.174.96.174.331 0 .96-.113 1.258-.226.315-.113.872-.423 1.013-.787.14-.368.14-.683.097-.753-.045-.07-.211-.113-.41-.183z"/></svg>
+                        </a>
+                        <a href="#about-us" data-key="footer_about" class="text-aguamarina hover:text-op-blue transition text-sm flex items-center">
+                            <span data-key="about_us_link">Sobre Nosotros</span>
+                        </a>
+                        <a href="#services-section" data-key="footer_services" class="text-aguamarina hover:text-op-blue transition text-sm flex items-center">
+                            <span data-key="services_link">Servicios</span>
+                        </a>
+                    </div>
+                    <p class="mt-8 text-gray-500 text-xs" data-key="footer_copyright">
+                        &copy; 2025 OptiClean Soluciones. Todos los derechos reservados.
+                    </p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Objeto de diccionario para la traducción
+        const translations = {
+            es: {
+                language: 'Idioma',
+                lang_es: 'Español',
+                lang_en: 'English',
+                lang_pt: 'Português',
+                whatsapp_contact: 'Contáctanos',
+                // CAMBIO 1: Eliminado 'en Cali'
+                hero_title: 'OptiClean Soluciones: La Limpieza Inteligente',
+                hero_subtitle: 'Excelencia, Tecnología de Vanguardia y Compromiso Ecológico para su Empresa o Residencia.',
+                hero_cta: 'Descubra Nuestros Servicios',
+                about_us_title: 'Nuestra Propuesta de Valor',
+                mission_title: 'Misión',
+                // CAMBIO 2: Reemplazado 'en Cali y la región' por 'en la región'
+                mission_content: 'Ofrecer servicios de aseo y mantenimiento de alta calidad a empresas y conjuntos residenciales en *la región, garantizando la **óptima limpieza y desinfección* de sus espacios. Cumplimos nuestra promesa mediante la implementación de *tecnología de vanguardia, un equipo humano **calificado y experimentado, y la priorización de **prácticas ecológicas* que minimizan el impacto ambiental.',
+                vision_title: 'Visión',
+                vision_content: 'Ser la empresa líder en soluciones integrales de aseo empresarial y residencial en el suroccidente colombiano, reconocida por nuestra *excelencia operativa* impulsada por la *innovación tecnológica* y un firme *compromiso con la sostenibilidad*. Buscamos transformar la percepción del servicio de limpieza.',
+                values_title: 'Nuestros Valores: El Motor de la Excelencia',
+                value1_title: 'Innovación Tecnológica',
+                value1_content: 'Usamos maquinaria de última generación para optimizar procesos y garantizar resultados superiores.',
+                value2_title: 'Excelencia y Calidad',
+                value2_content: 'Nos comprometemos con los más altos estándares, ofreciendo limpieza y desinfección impecable.',
+                value3_title: 'Sostenibilidad Ambiental',
+                value3_content: 'Priorizamos productos y métodos ecológicos para minimizar el impacto en nuestro mundo.',
+                value4_title: 'Talento Humano',
+                value4_content: 'Equipo calificado y experimentado, garantizando la calidad y la eficiencia del servicio.',
+                value5_title: 'Confianza y Cumplimiento',
+                value5_content: 'Transparencia y riguroso cumplimiento de los acuerdos para construir relaciones duraderas.',
+                // CAMBIO 3: Eliminado 'Especializados en Cali'
+                services_title: 'Nuestros Servicios Especializados',
+                service1_title: 'Conjuntos Residenciales',
+                service1_content: 'Mantenimiento de zonas comunes, piscinas, escaleras y áreas sociales, asegurando el bienestar y la calidad de vida de los residentes.',
+                service2_title: 'Aseo Empresarial e Industrial',
+                service2_content: 'Limpieza profunda y desinfección de oficinas, fachadas, áreas de producción y zonas de alto tráfico con equipos tecnológicos.',
+                service3_title: 'Limpieza de Parqueaderos y Áreas Duras',
+                service3_content: 'Utilizamos maquinaria especializada para la limpieza profunda de pisos y parqueaderos, eliminando manchas difíciles con eficiencia.',
+                services_cta: 'Solicitar Cotización Ahora',
+                footer_phone: 'Contacto Directo: +57 318 218 0179',
+                footer_web: 'opticlean.xyz.com',
+                // CAMBIO 4: Eliminado 'Cali'
+                footer_address: 'Sede en Colombia. Sirviendo al suroccidente colombiano.',
+                footer_whatsapp: 'WhatsApp',
+                about_us_link: 'Sobre Nosotros',
+                services_link: 'Servicios',
+                footer_copyright: '© 2025 OptiClean Soluciones. Todos los derechos reservados.',
+                cart_title: 'Cesta de Cotización',
+                cart_empty: 'Aún no has añadido servicios a tu cotización. Explora nuestros planes.',
+                modal_close: 'Cerrar',
+                modal_request: 'Solicitar Cotización',
+            },
+            en: {
+                language: 'Language',
+                lang_es: 'Spanish',
+                lang_en: 'English',
+                lang_pt: 'Portuguese',
+                whatsapp_contact: 'Contact Us',
+                // CAMBIO 1: Eliminado 'in Cali'
+                hero_title: 'OptiClean Soluciones: Intelligent Cleaning',
+                hero_subtitle: 'Excellence, Cutting-Edge Technology, and Eco-Commitment for your Business or Residence.',
+                hero_cta: 'Discover Our Services',
+                about_us_title: 'Our Value Proposition',
+                mission_title: 'Mission',
+                // CAMBIO 2: Reemplazado 'in Cali and the region' por 'in the region'
+                mission_content: 'To offer high-quality cleaning and maintenance services to companies and residential complexes in *the region, ensuring **optimal cleanliness and disinfection* of their spaces. We fulfill our promise through the implementation of *cutting-edge technology, a **qualified and experienced* human team, and the prioritization of *ecological practices* that minimize environmental impact.',
+                vision_title: 'Vision',
+                vision_content: 'To be the leading company in comprehensive business and residential cleaning solutions in southwestern Colombia, recognized for our *operational excellence* driven by *technological innovation* and a firm *commitment to sustainability*. We seek to transform the perception of cleaning services.',
+                values_title: 'Our Values: The Engine of Excellence',
+                value1_title: 'Technological Innovation',
+                value1_content: 'We use the latest generation machinery to optimize processes and guarantee superior results.',
+                value2_title: 'Excellence and Quality',
+                value2_content: 'We are committed to the highest standards, offering impeccable cleaning and disinfection.',
+                value3_title: 'Environmental Sustainability',
+                value3_content: 'We prioritize ecological products and methods to minimize the impact on our world.',
+                value4_title: 'Human Talent',
+                value4_content: 'Qualified and experienced team, guaranteeing the quality and efficiency of the service.',
+                value5_title: 'Trust and Compliance',
+                value5_content: 'Transparency and rigorous compliance with agreements to build lasting relationships.',
+                // CAMBIO 3: Eliminado 'in Cali'
+                services_title: 'Our Specialized Services',
+                service1_title: 'Residential Complexes',
+                service1_content: 'Maintenance of common areas, swimming pools, stairwells, and social areas, ensuring the well-being and quality of life of residents.',
+                service2_title: 'Business and Industrial Cleaning',
+                service2_content: 'Deep cleaning and disinfection of offices, facades, production areas, and high-traffic zones with technological equipment.',
+                service3_title: 'Parking Lot and Hard Area Cleaning',
+                service3_content: 'We use specialized machinery for the deep cleaning of floors and parking lots, efficiently eliminating stubborn stains.',
+                services_cta: 'Request a Quote Now',
+                footer_phone: 'Direct Contact: +57 318 218 0179',
+                footer_web: 'opticlean.xyz.com',
+                // CAMBIO 4: Eliminado 'Cali'
+                footer_address: 'Headquarters in Colombia. Serving the Colombian southwest.',
+                footer_whatsapp: 'WhatsApp',
+                about_us_link: 'About Us',
+                services_link: 'Services',
+                footer_copyright: '© 2025 OptiClean Soluciones. All rights reserved.',
+                cart_title: 'Quotation Cart',
+                cart_empty: 'You haven\'t added services to your quote yet. Explore our plans.',
+                modal_close: 'Close',
+                modal_request: 'Request Quote',
+            },
+            pt: {
+                language: 'Língua',
+                lang_es: 'Espanhol',
+                lang_en: 'Inglês',
+                lang_pt: 'Português',
+                whatsapp_contact: 'Contate-nos',
+                // CAMBIO 1: Eliminado 'em Cali'
+                hero_title: 'OptiClean Soluções: Limpeza Inteligente',
+                hero_subtitle: 'Excelência, Tecnologia de Ponta e Compromisso Ecológico para sua Empresa ou Residência.',
+                hero_cta: 'Descubra Nossos Serviços',
+                about_us_title: 'Nossa Proposta de Valor',
+                mission_title: 'Missão',
+                // CAMBIO 2: Reemplazado 'em Cali e região' por 'na região'
+                mission_content: 'Oferecer serviços de limpeza e manutenção de alta qualidade para empresas e condomínios residenciais na *região, garantindo a **limpeza e desinfecção ideais* de seus espaços. Cumprimos nossa promessa através da implementação de *tecnologia de ponta, uma equipe humana **qualificada e experiente, e priorizando **práticas ecológicas* que minimizam o impacto ambiental.',
+                vision_title: 'Visão',
+                vision_content: 'Ser a empresa líder em soluções integrais de limpeza empresarial e residencial no sudoeste colombiano, reconhecida pela nossa *excelência operacional* impulsionada pela *inovação tecnológica* e um firme *compromisso com a sustentabilidade*. Buscamos transformar a percepção do serviço de limpeza.',
+                values_title: 'Nossos Valores: O Motor da Excelência',
+                value1_title: 'Inovação Tecnológica',
+                value1_content: 'Utilizamos máquinas de última geração para otimizar processos e garantir resultados superiores.',
+                value2_title: 'Excelência e Qualidade',
+                value2_content: 'Comprometemo-nos com os mais altos padrões, oferecendo limpeza e desinfecção impecável.',
+                value3_title: 'Sostenibilidade Ambiental',
+                value3_content: 'Priorizamos produtos e métodos ecológicos para minimizar o impacto em nosso mundo.',
+                value4_title: 'Talento Humano',
+                value4_content: 'Equipe qualificada e experiente, garantindo a qualidade e eficiência do serviço.',
+                value5_title: 'Confiança e Cumprimento',
+                value5_content: 'Transparência e cumprimento rigoroso dos acordos para construir relacionamentos duradouros.',
+                // CAMBIO 3: Eliminado 'em Cali'
+                services_title: 'Nossos Serviços Especializados',
+                service1_title: 'Condomínios Residenciais',
+                service1_content: 'Manutenção de áreas comuns, piscinas, escadas e áreas sociais, garantindo o bem-estar e a qualidade de vida dos moradores.',
+                service2_title: 'Limpeza Empresarial e Industrial',
+                service2_content: 'Limpeza profunda e desinfecção de escritórios, fachadas, áreas de produção e zonas de alto tráfego com equipamentos tecnológicos.',
+                service3_title: 'Limpeza de Estacionamentos e Áreas Duras',
+                service3_content: 'Utilizamos máquinas especializadas para a limpeza profunda de pisos e estacionamentos, eliminando manchas difíceis com eficiência.',
+                services_cta: 'Solicitar Orçamento Agora',
+                footer_phone: 'Contato Direto: +57 318 218 0179',
+                footer_web: 'opticlean.xyz.com',
+                // CAMBIO 4: Eliminado 'Cali'
+                footer_address: 'Sede na Colômbia. Atendendo o sudoeste colombiano.',
+                footer_whatsapp: 'WhatsApp',
+                about_us_link: 'Sobre Nós',
+                services_link: 'Serviços',
+                footer_copyright: '© 2025 OptiClean Soluções. Todos os direitos reservados.',
+                cart_title: 'Cesta de Orçamento',
+                cart_empty: 'Você ainda não adicionou serviços ao seu orçamento. Explore nossos planos.',
+                modal_close: 'Fechar',
+                modal_request: 'Solicitar Orçamento',
+            }
+        };
+
+        let currentLang = 'es';
+        const elements = document.querySelectorAll('[data-key]');
+        const translateButton = document.getElementById('translate-button');
+        const translateMenu = document.getElementById('translate-menu');
+
+        // Función para aplicar la traducción
+        function translatePage(lang) {
+            currentLang = lang;
+            elements.forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    // Si el contenido tiene markdown como *negrita*, usamos innerHTML
+                    if (translations[lang][key].includes('**')) {
+                        let text = translations[lang][key];
+                        // Conversión simple de *texto* a <strong>texto</strong>
+                        text = text.replace(/\\(.?)\\*/g, '<strong>$1</strong>');
+                        element.innerHTML = text;
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            // Ocultar el menú después de la selección
+            translateMenu.classList.add('hidden');
+        }
+
+        // Toggle para mostrar/ocultar el menú de traducción
+        translateButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            translateMenu.classList.toggle('hidden');
+        });
+
+        // Event listener para cerrar el menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!translateButton.contains(e.target) && !translateMenu.contains(e.target)) {
+                translateMenu.classList.add('hidden');
+            }
+        });
+
+        // Asignar event listeners a las opciones del menú
+        document.querySelectorAll('#translate-menu a').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const lang = e.target.getAttribute('data-lang');
+                translatePage(lang);
+            });
+        });
+
+
+        // --- Lógica del Carrito (Modal) ---
+        const cartButton = document.getElementById('cart-button');
+        const cartCountElement = document.getElementById('cart-count');
+        let cartItems = [];
+
+        // Crear el elemento Modal
+        const modal = document.createElement('div');
+        modal.id = 'cart-modal';
+        modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex items-center justify-center z-50 transition-opacity duration-300';
+        modal.innerHTML = `
+            <div class="bg-white rounded-xl shadow-2xl p-6 w-11/12 md:w-1/3 max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h3 id="modal-title" class="text-2xl font-bold text-op-blue" data-key="cart_title">${translations.es.cart_title}</h3>
+                    <button id="modal-close" class="text-gray-500 hover:text-gray-800 transition">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="X"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div id="cart-list" class="space-y-4">
+                    <!-- Los elementos del carrito irán aquí -->
+                    <p id="cart-empty-message" class="text-gray-500 text-center" data-key="cart_empty">${translations.es.cart_empty}</p>
+                </div>
+                <div class="mt-6 pt-4 border-t flex justify-end">
+                    <button id="modal-request" class="px-6 py-3 bg-op-green text-white font-semibold rounded-lg hover:bg-lima transition disabled:opacity-50" data-key="modal_request" disabled>${translations.es.modal_request}</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        const modalCloseButton = document.getElementById('modal-close');
+        const modalRequestButton = document.getElementById('modal-request');
+        const cartList = document.getElementById('cart-list');
+        const cartEmptyMessage = document.getElementById('cart-empty-message');
+
+        // Función para agregar un servicio al carrito
+        function addToCart(serviceName) {
+            if (!cartItems.includes(serviceName)) {
+                cartItems.push(serviceName);
+            }
+            updateCartUI();
+        }
+
+        // Función para eliminar un servicio del carrito
+        function removeFromCart(serviceName) {
+            cartItems = cartItems.filter(item => item !== serviceName);
+            updateCartUI();
+        }
+
+        // Función para actualizar el conteo y la lista del carrito
+        function updateCartUI() {
+            cartCountElement.textContent = cartItems.length;
+            cartList.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                cartEmptyMessage.classList.remove('hidden');
+                modalRequestButton.disabled = true;
+                modalRequestButton.classList.add('cursor-not-allowed');
+            } else {
+                cartEmptyMessage.classList.add('hidden');
+                modalRequestButton.disabled = false;
+                modalRequestButton.classList.remove('cursor-not-allowed');
+
+                cartItems.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'flex justify-between items-center bg-gris-claro p-3 rounded-lg';
+                    itemDiv.innerHTML = `
+                        <span class="text-gray-700 font-medium">${item}</span>
+                        <button class="remove-item text-red-500 hover:text-red-700 transition" data-name="${item}">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" id="X"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    `;
+                    cartList.appendChild(itemDiv);
+                });
+
+                // Añadir listeners para remover items
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const nameToRemove = e.currentTarget.getAttribute('data-name');
+                        removeFromCart(nameToRemove);
+                    });
+                });
+            }
+        }
+
+        // Mostrar el modal
+        cartButton.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            // Re-apply translation on modal load
+            translatePage(currentLang);
+        });
+
+        // Ocultar el modal
+        modalCloseButton.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Ocultar el modal haciendo clic fuera
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Lógica para el botón "Solicitar Cotización"
+        modalRequestButton.addEventListener('click', () => {
+            if (cartItems.length > 0) {
+                const servicesList = cartItems.join(', ');
+                const message = encodeURIComponent(Hola OptiClean Soluciones, estoy interesado en una cotización para los siguientes servicios: ${servicesList});
+                window.open(https://wa.me/+573182180179?text=${message}, '_blank');
+                // Opcional: limpiar el carrito después de enviar
+                cartItems = [];
+                updateCartUI();
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Inicializar el carrito con un ejemplo y la traducción
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar la traducción a español por defecto
+            translatePage('es');
+
+            // Añadir botones "Añadir al Carrito" a cada servicio
+            const serviceTitles = [
+                translations.es.service1_title,
+                translations.es.service2_title,
+                translations.es.service3_title
+            ];
+
+            document.querySelectorAll('#services-section .grid > div').forEach((card, index) => {
+                const title = serviceTitles[index];
+                const button = document.createElement('button');
+                button.textContent = translations.es.footer_whatsapp.includes("WhatsApp") ? 'Añadir a Cotización' : 'Add to Quote'; // Placeholder text
+                button.className = 'mt-4 w-full px-4 py-2 bg-lima text-gray-800 font-semibold rounded-lg hover:bg-op-green hover:text-white transition focus:outline-none focus:ring-2 focus:ring-lima';
+                button.setAttribute('data-service', title);
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    addToCart(title);
+                    // Mostrar una breve confirmación
+                    e.target.textContent = currentLang === 'es' ? '¡Añadido!' : (currentLang === 'en' ? 'Added!' : 'Adicionado!');
+                    setTimeout(() => {
+                        updateButtonText(e.target);
+                    }, 1500);
+                });
+                card.querySelector('.p-6').appendChild(button);
+            });
+
+            // Función para actualizar el texto de los botones del carrito tras la traducción
+            function updateButtonText(buttonElement) {
+                if (currentLang === 'es') {
+                    buttonElement.textContent = 'Añadir a Cotización';
+                } else if (currentLang === 'en') {
+                    buttonElement.textContent = 'Add to Quote';
+                } else if (currentLang === 'pt') {
+                    buttonElement.textContent = 'Adicionar ao Orçamento';
+                }
+            }
+
+            // Sobrescribir translatePage para manejar la traducción de los servicios dinámicamente
+            const originalTranslatePage = translatePage;
+            translatePage = function(lang) {
+                originalTranslatePage(lang);
+
+                // 1. Traducir los botones "Añadir a Cotización"
+                document.querySelectorAll('#services-section button[data-service]').forEach((button) => {
+                    updateButtonText(button);
+                });
+
+                // 2. Traducir el mensaje de carrito vacío
+                document.getElementById('cart-empty-message').textContent = translations[lang].cart_empty;
+
+                // 3. Traducir el título y el botón de solicitud del modal
+                document.getElementById('modal-title').textContent = translations[lang].cart_title;
+                document.getElementById('modal-request').textContent = translations[lang].modal_request;
+
+                // 4. Actualizar la lista de servicios en el carrito con el nuevo idioma
+                const currentItems = [...cartItems]; // Copia
+                const esKeys = Object.keys(translations.es).filter(k => k.startsWith('service') && k.endsWith('_title'));
+
+                cartItems = []; // Limpiar para rellenar con nombres traducidos
+                currentItems.forEach(item => {
+                    // Buscar la clave del servicio en ES para encontrar su traducción
+                    let serviceKey = esKeys.find(key => translations.es[key] === item);
+
+                    if (!serviceKey) {
+                        // Si no se encuentra la clave exacta, se asume que ya estaba traducido y se busca la clave en el idioma actual
+                        serviceKey = esKeys.find(key => translations[currentLang][key] === item);
+                    }
+
+                    if (serviceKey && translations[lang][serviceKey]) {
+                        addToCart(translations[lang][serviceKey]);
+                    } else {
+                        // Si falla, se mantiene el nombre original
+                        addToCart(item);
+                    }
+                });
+                updateCartUI(); // Re-renderizar con los nombres traducidos
+            };
+
+            // Inicializar la interfaz del carrito
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>
