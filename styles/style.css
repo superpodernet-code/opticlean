@@ -71,7 +71,7 @@ body {
   top: 0;
   z-index: 50;
   box-shadow: var(--shadow-lg);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(255, 255, 255);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -106,7 +106,7 @@ body {
 }
 
 /**
- * Logo y Marca
+ * Logo y Marca - NUEVO LOGO
  */
 
 .logo-container {
@@ -116,20 +116,50 @@ body {
   gap: 0.75rem;
 }
 
-.logo-svg {
-  width: 50px;
-  height: 50px;
+.logo-image {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 60px;
+  /* Mantiene la altura consistente */
+  width: auto;
+  /* Mantiene la proporción */
+  max-width: 200px;
+  /* Evita que sea demasiado ancho */
   transition: transform 0.3s ease;
 }
 
-.logo-svg:hover {
+.logo-img:hover {
   transform: scale(1.05);
 }
 
 .logo-text {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-op-blue);
+  /* color: var(--color-op-blue); */
+  color: #05C7F2;
+}
+
+.logo-text2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  /* color: var(--color-op-blue); */
+  color: silver;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .logo-img {
+    height: 40px;
+    /* Un poco más pequeño en móviles */
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+    /* Texto más pequeño en móviles */
+  }
 }
 
 /**
