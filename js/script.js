@@ -65,7 +65,7 @@ const translations = {
         lang_en: 'English',
         lang_pt: 'Portuguese',
         whatsapp_contact: 'Contact Us',
-        hero_title: 'OptiClean Soluciones: Intelligent Cleaning',
+        hero_title: 'OptiClean Soluciones:',
         hero_subtitle: 'Excellence, Cutting-Edge Technology, and Eco-Commitment for your Business or Residence.',
         hero_cta: 'Discover Our Services',
         about_us_title: 'Our Value Proposition',
