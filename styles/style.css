@@ -72,8 +72,8 @@ body {
   z-index: 50;
   box-shadow: var(--shadow-lg);
   background: rgb(255, 255, 255);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .header-container {
