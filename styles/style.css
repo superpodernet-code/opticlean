@@ -143,23 +143,44 @@ body {
 }
 
 .logo-text2 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
   /* color: var(--color-op-blue); */
   color: silver;
 }
 
 /* Responsive para móviles */
 @media (max-width: 768px) {
+  .logo-container {
+    flex-direction: column;
+    /* Ajusta la alineación de los elementos apilados. 'flex-start' o 'center' son comunes. */
+    align-items: center;
+    /* O 'center' si quieres que el texto quede centrado */
+  }
+
+  /* Si quieres reducir el espacio entre el logo y los textos apilados */
+  .logo-container {
+    gap: 0.25rem;
+  }
+
   .logo-img {
+    margin-top: 0.25rem;
     height: 40px;
     /* Un poco más pequeño en móviles */
   }
 
   .logo-text {
-    font-size: 1.25rem;
+    font-size: 1rem;
+    height: 10px;
     /* Texto más pequeño en móviles */
   }
+
+  .logo-text2 {
+    font-size: 1rem;
+
+    /* Texto más pequeño en móviles */
+  }
+
 }
 
 /**
